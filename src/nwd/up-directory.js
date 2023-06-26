@@ -1,25 +1,16 @@
 import { errorHandler } from '../helpers/errorHandler.js';
 import fs from 'fs/promises';
+import path from 'path';
 
-export const listOfFiles = async (currentDir) => {
+export async function upDirectory(currentDir) {
   try {
-    const items = await fs.readdir(currentDir, { withFileTypes: true });
+    const parentDir = path.dirname(currentDir);
+    const stats = await fs.stat(parentDir);
 
-    const sortedList = items.map((item) => {
-      const fileType = item.isFile() ? 'file' : 'directory';
-      return { Name: item.name, Type: fileType };
-    }).sort((a, b) => {
-      if (a.Type === b.Type) {
-        return a.Name.localeCompare(b.Name);
-      } else if (a.Type === 'directory') {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-
-    console.table(sortedList);
+    if (stats.isDirectory()) {
+      return parentDir;
+    }
   } catch (error) {
     errorHandler(error);
   }
-};
+}
