@@ -1,7 +1,7 @@
 import { errorHandler } from './errorHandler.js';
 import os from 'os';
 
-export async function osHeandler(args) {
+export async function osHandler(args) {
   try {
     switch (args) {
       case '--EOL':
