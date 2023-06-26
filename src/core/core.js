@@ -13,22 +13,34 @@ import { copyFile } from '../basic/copy-file.js';
 import { moveFile } from '../basic/move-file.js';
 import { removeFile } from '../basic/delete-file.js';
 import { osHandler } from '../helpers/os.js';
-import { hashCalculator } from '../helpers/hash.js'
+import { hashCalculator } from '../helpers/hash.js';
 import { compressFile } from '../zip/compress.js';
 import { decompressFile } from '../zip/decompress.js';
 
-const rl = readline.createInterface({
+const { createInterface } = readline;
+const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
 });
 
-const username = process.argv[2].replace('--username=', '');
+const username = process.argv[2]?.replace('--username=', '');
 
 const question = promisify(rl.question).bind(rl);
 
-async function askUserInput(prompt) {
-  return await question(prompt);
-}
+const askUserInput = async (prompt) => await question(prompt);
+
+const handleSIGINT = () => {
+  console.log(
+    `\n *********************************************************
+     \n Thank you for using File Manager, ${username}, goodbye!
+     \n *********************************************************
+     \n`,
+  );
+  rl.close();
+  process.exit();
+};
+
+rl.on('SIGINT', handleSIGINT);
 
 async function core() {
   const homedir = os.homedir();
@@ -37,124 +49,60 @@ async function core() {
   console.log(`Welcome to the File Manager, ${username}!`);
   console.log(`You are currently in ${currentDir}`);
 
-  rl.on('SIGINT', () => {
-    console.log(
-      `\n *********************************************************
-       \n Thank you for using File Manager, ${username}, goodbye!
-       \n *********************************************************
-       \n`,
-    );
-    rl.close();
-    process.exit();
-  });
-
   while (true) {
     try {
       const input = await askUserInput(`>>> `);
       const [commandName, ...args] = input.split(' ');
+
       switch (commandName) {
         case 'cd':
-          try {
-            const fileName = args[0];
-            currentDir = await changeDirectory(currentDir, fileName);
-          } catch (error) {
-            errorHandler(error);
-          }
+          currentDir = await changeDirectory(currentDir, args[0]);
           break;
         case 'up':
-          try {
-            if (!!args.length) {
-              throw new Error();
-            }
+          if (args.length === 0) {
             const newDir = await upDirectory(currentDir);
             if (newDir) {
               currentDir = newDir;
             }
-          } catch (error) {
-            errorHandler(error);
+          } else {
+            throw new Error();
           }
           break;
         case 'ls':
-          try {
-            await listOfFiles(currentDir);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await listOfFiles(currentDir);
           break;
         case 'cat':
-          try {
-            await readFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await readFile(args);
           break;
         case 'add':
-          try {
-            await createFile(args, currentDir);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await createFile(args, currentDir);
           break;
         case 'rn':
-          try {
-            await renameFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await renameFile(args);
           break;
         case 'cp':
-          try {
-            await copyFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await copyFile(args);
           break;
         case 'mv':
-          try {
-            await moveFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await moveFile(args);
           break;
         case 'rm':
-          try {
-            await removeFile(...args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await removeFile(...args);
           break;
         case 'os':
-          try {
-            await osHandler(...args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await osHandler(...args);
           break;
         case 'hash':
-          try {
-            await hashCalculator(...args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await hashCalculator(...args);
           break;
         case 'compress':
-          try {
-            await compressFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await compressFile(args);
           break;
         case 'decompress':
-          try {
-            await decompressFile(args);
-          } catch (error) {
-            errorHandler(error);
-          }
+          await decompressFile(args);
           break;
         case 'exit':
-          console.log(
-            `Thank you for using File Manager, ${username}, goodbye!`,
-          );
+          console.log(`Thank you for using File Manager, ${username}, goodbye!`);
           rl.close();
           return;
         default:
@@ -169,4 +117,4 @@ async function core() {
   }
 }
 
-export default core;
+export { core };
