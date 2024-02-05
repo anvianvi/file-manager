@@ -1,12 +1,26 @@
 {
   "name": "file-manager",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "assignment: file manager for rsschool",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anvianvi/file-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anvianvi/file-manager/issues"
+  },
+  "homepage": "https://github.com/anvianvi/file-manager#readme",
+  "keywords": [
+    "rsschool"
+  ],
   "author": "pavel viarbitski",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

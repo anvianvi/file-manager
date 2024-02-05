@@ -1,20 +1,31 @@
 import { errorHandler } from '../helpers/errorHandler.js';
-import { createReadStream } from 'fs';
-import path from 'path';
-import { pipeline } from 'stream/promises';
+import fs from 'fs';
+import { resolve } from 'path';
 
-export const readFile = async (currentDir, fileToReadName) => {
+export const readFile = async (filePath) => {
   try {
-    const pathToFileToRead = path.join(currentDir, fileToReadName);
-
-    const readableStream = createReadStream(pathToFileToRead, {
+    const currentPath = resolve(filePath.toString());
+    
+    const readableStream = fs.createReadStream(currentPath, {
       encoding: 'utf8',
     });
 
-    await pipeline(
-      readableStream,
-      process.stdout)
+    return new Promise((resolve, reject) => {
+      let data = '';
 
+      readableStream.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      readableStream.on('end', () => {
+        console.log(data);
+        resolve();
+      });
+
+      readableStream.on('error', (error) => {
+        reject(error);
+      });
+    });
   } catch (error) {
     errorHandler(error);
   }
