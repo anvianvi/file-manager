@@ -3,9 +3,9 @@ import os from 'os';
 import { promisify } from 'util';
 
 import { errorHandler } from '../helpers/errorHandler.js';
-import { changeDirectory } from '../nwd/change-directory.js';
-import { upDirectory } from '../nwd/up-directory.js';
-import { listOfFiles } from '../nwd/list-of-files.js';
+import { changeDirectory } from '../navigation/change-directory.js';
+import { upDirectory } from '../navigation/up-directory.js';
+import { listOfFiles } from '../navigation/list-of-files.js';
 import { readFile } from '../basic/read-file.js';
 import { createFile } from '../basic/create-file.js';
 import { renameFile } from '../basic/rename-file.js';
@@ -72,7 +72,8 @@ async function core() {
           await listOfFiles(currentDir);
           break;
         case 'cat':
-          await readFile(args);
+          const fileName = args[0]
+          await readFile(currentDir, fileName);
           break;
         case 'add':
           await createFile(args, currentDir);

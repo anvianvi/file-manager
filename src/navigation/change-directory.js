@@ -2,10 +2,8 @@ import { errorHandler } from '../helpers/errorHandler.js';
 import fs from 'fs/promises';
 import path from 'path';
 
-export async function changeDirectory(currentDir, fileName) {
+export async function changeDirectory(currentDir, targetPath) {
   try {
-    const targetPath = fileName;
-
     if (targetPath === '..') {
       currentDir = path.dirname(currentDir);
     } else {
