@@ -11,10 +11,10 @@ Navigation & working directory:
 Basic operations with files:
 
 - cat file_name - Read file and print it's content in console
+- add new_file_name - Create empty file in current working directory
 
 <!-- - cat path_to_file - Read file and print it's content in console -->
 
-- add new_file_name - Create empty file in current working directory
 - rn path_to_file new_filename - Rename file
 - cp path_to_file path_to_new_directory - Copy file
 - mv path_to_file path_to_new_directory - Move file should be done using Readable and Writable streams

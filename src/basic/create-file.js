@@ -1,25 +1,14 @@
+import path from 'path';
 import { errorHandler } from '../helpers/errorHandler.js';
-import fs from 'fs';
-import { resolve } from 'path';
+import { writeFile } from 'fs/promises';
 
-export const createFile = async (filename, currentDir) => {
+export const createFile = async (currentDir, args) => {
   try {
-    const currentPath = resolve(currentDir, filename.toString());
-    
-    const writableStream = fs.createWriteStream(currentPath);
+    const newFileName = args[0]
+    const pathToFile = path.join(currentDir, newFileName);
+    await writeFile(pathToFile, '', { flag: 'wx' });
+    console.log(`File with name - ${newFileName} created`)
 
-    return new Promise((resolve, reject) => {
-      writableStream.on('finish', () => {
-        console.log(`The file has been created: ${currentPath}`);
-        resolve();
-      });
-
-      writableStream.on('error', (error) => {
-        reject(error);
-      });
-
-      writableStream.end();
-    });
   } catch (error) {
     errorHandler(error);
   }
