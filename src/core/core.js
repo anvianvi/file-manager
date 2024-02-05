@@ -12,8 +12,8 @@ import { renameFile } from '../basic/rename-file.js';
 import { copyFile } from '../basic/copy-file.js';
 import { moveFile } from '../basic/move-file.js';
 import { removeFile } from '../basic/delete-file.js';
-import { osHandler } from '../helpers/os.js';
-import { hashCalculator } from '../helpers/hash.js';
+import { osHandler } from '../os/os.js';
+import { hashCalculator } from '../hash/hash.js';
 import { compressFile } from '../zip/compress.js';
 import { decompressFile } from '../zip/decompress.js';
 

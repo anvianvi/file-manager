@@ -1,4 +1,4 @@
-import { errorHandler } from './errorHandler.js';
+import { errorHandler } from '../helpers/errorHandler.js';
 import os from 'os';
 
 export async function osHandler(args) {
@@ -20,7 +20,7 @@ export async function osHandler(args) {
         printCpuArchitecture();
         break;
       default:
-        console.log(`Invalid input`);
+        console.log(`Need to provide args with 'os' command \n You can use --EOL, --cpus, --homedir, --username, --architecture`);
         break;
     }
   } catch (error) {
@@ -29,7 +29,7 @@ export async function osHandler(args) {
 }
 
 function printEndOfLine() {
-  console.log(`End-Of-Line: ${JSON.stringify(os.EOL)} \n`);
+  console.log(`current End-Of-Line: ${JSON.stringify(os.EOL)} \n`);
 }
 
 function printCpuInfo() {

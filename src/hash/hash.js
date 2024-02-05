@@ -1,10 +1,10 @@
-import { errorHandler } from './errorHandler.js';
-import fs from 'fs/promises';
+import { errorHandler } from '../helpers/errorHandler.js';
+import { readFile } from 'fs/promises';
 import { createHash } from 'crypto';
 
 export const hashCalculator = async (path) => {
   try {
-    const message = await fs.readFile(path, 'utf8');
+    const message = await readFile(path, 'utf8');
 
     const hash = createHash('sha256').update(message).digest('hex');
 
