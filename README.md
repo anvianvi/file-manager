@@ -31,6 +31,7 @@ Operating system info (prints following information in console)
 Hash calculation
 
 - hash path_to_file - Calculate hash for file and print it into console
+  **Example:** hash C:\Users\User\test\test.txt
 
 Compress and decompress operations
 

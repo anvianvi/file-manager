@@ -2,8 +2,9 @@ import { errorHandler } from '../helpers/errorHandler.js';
 import os from 'os';
 
 export async function osHandler(args) {
+  const command = args[0]
   try {
-    switch (args) {
+    switch (command) {
       case '--EOL':
         printEndOfLine();
         break;

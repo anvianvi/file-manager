@@ -90,10 +90,10 @@ async function core() {
           await removeFile(currentDir, args);
           break;
         case 'os':
-          await osHandler(...args);
+          await osHandler(args);
           break;
         case 'hash':
-          await hashCalculator(...args);
+          await hashCalculator(args);
           break;
         case 'compress':
           await compressFile(args);
