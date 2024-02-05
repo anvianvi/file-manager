@@ -72,7 +72,8 @@ async function core() {
           await listOfFiles(currentDir);
           break;
         case 'cat':
-          await readFile(args);
+          const fileName = args[0]
+          await readFile(currentDir, fileName);
           break;
         case 'add':
           await createFile(args, currentDir);
