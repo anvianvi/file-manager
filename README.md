@@ -36,4 +36,6 @@ Hash calculation
 Compress and decompress operations
 
 - compress path_to_file path_to_destination - Compress file (using Brotli algorithm)
+  **Example:** compress C:\Users\User\test\test.txt C:\Users\User\test\newfolder\
 - decompress path_to_file path_to_destination - Decompress file (using Brotli algorithm)
+  **Example:** decompress C:\Users\User\test\newfolder\compressed-with-brotli-test.txt C:\Users\User\test\newfolder

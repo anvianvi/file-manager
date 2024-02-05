@@ -1,25 +1,21 @@
-import fs from 'fs';
-import zlib from 'zlib';
-import path from 'path';
+import { createReadStream, createWriteStream } from 'fs';
+import { createBrotliCompress } from 'zlib';
+import { basename, resolve } from 'path';
 import { pipeline } from 'stream/promises';
 import { errorHandler } from '../helpers/errorHandler.js';
 
-export const compressFile = async (pathToFile, pathToDestination) => {
+export const compressFile = async (args) => {
   try {
-    const resolvedPathToFile = path.resolve(pathToFile);
-    const resolvedPathToDestination = path.resolve(pathToDestination);
-    const outputPath = `${resolvedPathToDestination}/${path.basename(
-      resolvedPathToFile
-    )}.br`;
+    const pathToFile = args[0]
+    const pathToDestination = args[1]
 
-    const readStream = fs.createReadStream(resolvedPathToFile, {
-      encoding: 'utf8'
-    });
-    const writeStream = fs.createWriteStream(outputPath);
+    const outputPath = resolve(pathToDestination, `compressed-with-brotli-${basename(pathToFile)}`);
 
-    const brotliStream = zlib.createBrotliCompress();
+    const readStream = createReadStream(pathToFile);
+    const writeStream = createWriteStream(outputPath);
+    const gzipStream = createBrotliCompress();
 
-    await pipeline(readStream, brotliStream, writeStream);
+    await pipeline(readStream, gzipStream, writeStream)
 
     console.log(`File compressed to ${outputPath}`);
   } catch (error) {

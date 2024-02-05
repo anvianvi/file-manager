@@ -1,23 +1,23 @@
-import fs from 'fs';
-import zlib from 'zlib';
-import path, { resolve } from 'path';
+import { createReadStream, createWriteStream } from 'fs';
+import { createBrotliDecompress } from 'zlib';
+import { basename, resolve } from 'path';
 import { pipeline } from 'stream/promises';
 import { errorHandler } from '../helpers/errorHandler.js';
 
-export const decompressFile = async (pathToFile, pathToDestination) => {
+export const decompressFile = async (args) => {
   try {
-    const resolvedPathToFile = resolve(pathToFile);
-    const resolvedPathToDestination = resolve(pathToDestination);
-    const newFileName = path.basename(resolvedPathToFile, '.br');
-    const pathNewFile = resolve(resolvedPathToDestination, newFileName);
+    const pathToFile = args[0]
+    const pathToDestination = args[1]
 
-    const inputStream = fs.createReadStream(resolvedPathToFile);
-    const brotliStream = zlib.createBrotliDecompress();
-    const outputStream = fs.createWriteStream(pathNewFile);
+    const outputPath = resolve(pathToDestination, `decompresed-with-brotli-${basename(pathToFile)}`);
 
-    await pipeline(inputStream, brotliStream, outputStream);
+    const readStream = createReadStream(pathToFile);
+    const writeStream = createWriteStream(outputPath);
+    const unzipStream = createBrotliDecompress();
 
-    console.log(`File decompressed to "${pathNewFile}"`);
+    await pipeline(readStream, unzipStream, writeStream);
+
+    console.log(`File decompressed to "${pathToDestination}"`);
   } catch (error) {
     errorHandler(error);
   }
