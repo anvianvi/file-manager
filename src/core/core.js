@@ -23,7 +23,7 @@ const rl = createInterface({
   output: process.stdout,
 });
 
-const username = process.argv[2]?.replace('--username=', '');
+const username = process.argv[2]?.replace('--username=', '') || 'default';
 
 const question = promisify(rl.question).bind(rl);
 
@@ -72,11 +72,10 @@ async function core() {
           await listOfFiles(currentDir);
           break;
         case 'cat':
-          const fileName = args[0]
-          await readFile(currentDir, fileName);
+          await readFile(currentDir, args);
           break;
         case 'add':
-          await createFile(args, currentDir);
+          await createFile(currentDir, args);
           break;
         case 'rn':
           await renameFile(args);
