@@ -78,7 +78,7 @@ async function core() {
           await createFile(currentDir, args);
           break;
         case 'rn':
-          await renameFile(args);
+          await renameFile(currentDir, args);
           break;
         case 'cp':
           await copyFile(args);

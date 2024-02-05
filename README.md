@@ -13,7 +13,8 @@ Basic operations with files:
 - cat file_name - Read file and print it's content in console
 - add new_file_name - Create empty file in current working directory
 - rm file_name - Delete file in current directory
-
+- rn path_to_file new_filename - Rename file
+  example: rn C:\Users\User\test\test.txt newtest.txt
 
 <!-- - cat path_to_file - Read file and print it's content in console -->
 

@@ -1,13 +1,13 @@
+import path from 'path';
 import { errorHandler } from '../helpers/errorHandler.js';
 import fs from 'fs';
-import { resolve } from 'path';
 
-export const renameFile = async (pathToFile, newFilename) => {
+export const renameFile = async (currentDir, args) => {
   try {
-    const resolvedPathToFile = resolve(pathToFile);
-    const resolvedNewFilename = resolve(newFilename);
+    const oldFileNamePath = args[0]
+    const newFileNamePath = path.join(currentDir, args[1]);
 
-    await fs.promises.rename(resolvedPathToFile, resolvedNewFilename);
+    await fs.promises.rename(oldFileNamePath, newFileNamePath);
     console.log('The file was renamed successfully.');
   } catch (error) {
     errorHandler(error);
