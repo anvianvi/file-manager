@@ -87,7 +87,7 @@ async function core() {
           await moveFile(args);
           break;
         case 'rm':
-          await removeFile(...args);
+          await removeFile(currentDir, args);
           break;
         case 'os':
           await osHandler(...args);
