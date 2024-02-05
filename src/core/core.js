@@ -3,9 +3,9 @@ import os from 'os';
 import { promisify } from 'util';
 
 import { errorHandler } from '../helpers/errorHandler.js';
-import { changeDirectory } from '../nwd/change-directory.js';
-import { upDirectory } from '../nwd/up-directory.js';
-import { listOfFiles } from '../nwd/list-of-files.js';
+import { changeDirectory } from '../navigatin/change-directory.js';
+import { upDirectory } from '../navigatin/up-directory.js';
+import { listOfFiles } from '../navigatin/list-of-files.js';
 import { readFile } from '../basic/read-file.js';
 import { createFile } from '../basic/create-file.js';
 import { renameFile } from '../basic/rename-file.js';
