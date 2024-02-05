@@ -1,36 +1,30 @@
+import { basename, resolve } from 'path';
 import { errorHandler } from '../helpers/errorHandler.js';
-import fs from 'fs';
-import path, { resolve as resolvePath } from 'path';
+import { access, unlink } from 'fs/promises';
+import { createReadStream, createWriteStream } from 'fs';
 
-export const moveFile = async (sourceFilePath, destinationFilePath) => {
+export const moveFile = async (args) => {
   try {
-    if (!destinationFilePath) {
-      throw new Error('Destination file path is required.');
-    }
+    const sourceFilePath = args[0]
+    const destinationFolderPath = args[1]
 
-    const sourcePath = resolvePath(sourceFilePath);
-    const destinationPath = resolvePath(destinationFilePath, path.basename(sourceFilePath));
+    await access(sourceFilePath);
 
-    const readableStream = fs.createReadStream(sourcePath);
-    const writableStream = fs.createWriteStream(destinationPath);
+    const targetPath = resolve(destinationFolderPath, basename(sourceFilePath));
 
-    return new Promise((resolve, reject) => {
-      readableStream.pipe(writableStream);
+    const readStream = createReadStream(sourceFilePath);
+    const writeNewFileStream = createWriteStream(targetPath);
 
-      writableStream.on('finish', async () => {
-        await fs.promises.unlink(sourcePath);
-        console.log(`The file has been moved to ${destinationPath}`);
-        resolve();
-      });
+    readStream.pipe(writeNewFileStream);
 
-      readableStream.on('error', (error) => {
-        reject(error);
-      });
-
-      writableStream.on('error', (error) => {
-        reject(error);
-      });
+    await new Promise((resolve) => {
+      writeNewFileStream.on('close', resolve);
     });
+
+    await unlink(sourceFilePath);
+
+    console.log(`File ${sourceFilePath} successfully muved to ${destinationFolderPath}`);
+
   } catch (error) {
     errorHandler(error);
   }

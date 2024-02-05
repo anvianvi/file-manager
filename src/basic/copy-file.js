@@ -1,35 +1,24 @@
 import { errorHandler } from '../helpers/errorHandler.js';
-import fs from 'fs';
-import path from 'path';
+import { createReadStream, createWriteStream } from 'fs';
+import { access } from 'fs/promises';
+import { basename, resolve } from 'path';
 
-export const copyFile = async (sourceFilePath, destinationFolderPath) => {
+export const copyFile = async (args) => {
   try {
-    if (!destinationFolderPath) {
-      throw new Error();
-    }
+    const sourceFilePath = args[0]
+    const destinationFolderPath = args[1]
 
-    const fileName = path.basename(sourceFilePath);
-    const destinationFilePath = path.resolve(destinationFolderPath, fileName);
+    await access(sourceFilePath);
 
-    const readableStream = fs.createReadStream(sourceFilePath, { encoding: 'utf-8' });
-    const writableStream = fs.createWriteStream(destinationFilePath);
+    const copyFileName = basename(sourceFilePath)
+    const targetPath = resolve(destinationFolderPath, copyFileName)
 
-    return new Promise((resolve, reject) => {
-      readableStream.on('error', (error) => {
-        reject(error);
-      });
+    const readStream = createReadStream(sourceFilePath);
+    const writeNewFileStream = createWriteStream(targetPath);
 
-      writableStream.on('error', (error) => {
-        reject(error);
-      });
+    readStream.pipe(writeNewFileStream);
 
-      writableStream.on('finish', () => {
-        console.log(`File copied to ${destinationFolderPath}`);
-        resolve();
-      });
-
-      readableStream.pipe(writableStream);
-    });
+    console.log(`Copy of file ${sourceFilePath} successfully created at ${targetPath}`);
   } catch (error) {
     errorHandler(error);
   }

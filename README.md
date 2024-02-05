@@ -14,13 +14,11 @@ Basic operations with files:
 - add new_file_name - Create empty file in current working directory
 - rm file_name - Delete file in current directory
 - rn path_to_file new_filename - Rename file
-  example: rn C:\Users\User\test\test.txt newtest.txt
-
-<!-- - cat path_to_file - Read file and print it's content in console -->
-
-- rn path_to_file new_filename - Rename file
+  **Example:** rn C:\Users\User\test\test.txt newtest.txt
 - cp path_to_file path_to_new_directory - Copy file
+  **Example:** cp C:\Users\User\test\test.txt C:\Users\User\test\newfolder\
 - mv path_to_file path_to_new_directory - Move file should be done using Readable and Writable streams
+  **Example:** mv C:\Users\User\test\test.txt C:\Users\User\test\newfolder\
 
 Operating system info (prints following information in console)
 
